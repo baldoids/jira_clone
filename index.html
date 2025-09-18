@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="sp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Clone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="project-info">
+                <div class="project-avatar">🚀</div>
+                <div class="project-details">
+                    <h3>Team Beca Cells</h3>
+                    <p>Proyecto de Sistemas</p>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/fluency/48/what-i-do.png" alt="what-i-do"/>
+                </span>
+                Planificación
+            </a>
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/external-nawicon-flat-nawicon/64/external-board-business-nawicon-flat-nawicon.png" alt="external-board-business-nawicon-flat-nawicon"/>
+                </span>
+                Junta
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/color/48/--pocket-watch.png" alt="--pocket-watch"/>
+                </span>
+                Línea de tiempo
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/officel/80/ratings.png" alt="ratings"/>
+                </span>
+                Reportes
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/emoji/48/gear-emoji.png" alt="gear-emoji"/>
+                </span>
+                Componentes
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/ultraviolet/40/iphone-spinner.png" alt="iphone-spinner"/>
+                </span>
+                Lanzamientos
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/fluency/48/github.png" alt="github"/>
+                </span>
+                Repositorio
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">
+                    <img width="20" height="20" src="https://img.icons8.com/emoji/48/plus-emoji.png" alt="plus-emoji"/>
+                </span>
+                Agregar artículo
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="breadcrumb">
+                <span>Projectos</span>
+                <span>/</span>
+                <span>Team Beca Cells</span>
+                <span>/</span>
+                <strong>Board</strong>
+            </div>
+
+            <div class="header-actions">
+                <input type="text" placeholder="Filtros rápidos" class="search-box">
+                <button class="btn">Asignado ▼</button>
+                <button class="btn">Sprint ▼</button>
+                <button class="btn">Liberación</button>
+                <button class="btn" onclick="debugLocalStorage()" title="Debug LocalStorage">🔍</button>
+                <button class="btn">⋯</button>
+            </div>
+        </div>
+
+        <div class="board-container">
+            <div class="board" id="board">
+                <div class="column" data-status="todo">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="status-badge status-todo">Por hacer</span>
+                            <span id="todo-count">0</span>
+                        </div>
+                    </div>
+                    <div class="column-content" id="todo-column">
+                    </div>
+                    <button class="add-task-btn" onclick="openModal('todo')">+ Crear incidencia</button>
+                </div>
+
+                <div class="column" data-status="progress">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="status-badge status-progress">En Progreso</span>
+                            <span id="progress-count">0</span>
+                        </div>
+                    </div>
+                    <div class="column-content" id="progress-column">
+                        
+                    </div>
+                    <button class="add-task-btn" onclick="openModal('progress')">+ Crear incidencia</button>
+                </div>
+
+                <div class="column" data-status="review">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="status-badge status-review">En Revisión</span>
+                            <span id="review-count">0</span>
+                        </div>
+                    </div>
+                    <div class="column-content" id="review-column">
+                        
+                    </div>
+                    <button class="add-task-btn" onclick="openModal('review')">+ Crear incidencia</button>
+                </div>
+
+                <div class="column" data-status="done">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="status-badge status-done">Listos</span>
+                            <span id="done-count">0</span>
+                        </div>
+                    </div>
+                    <div class="column-content" id="done-column">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="confirmation-modal">
+        <div class="confirmation-content">
+            <h3>¿Eliminar tarea?</h3>
+            <p>Esta acción no se puede deshacer.</p>
+            <div class="confirmation-buttons">
+                <button class="btn" onclick="closeConfirmation()">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmDeleteTask()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Crear nueva tarea</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <form id="taskForm" onsubmit="saveTask(event)">
+                <div class="form-group">
+                    <label class="form-label">Título *</label>
+                    <input type="text" id="taskTitle" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea id="taskDescription" class="form-control" placeholder="Describe la tarea..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tipo</label>
+                        <select id="taskType" class="form-control">
+                            <option value="story">Story</option>
+                            <option value="task">Task</option>
+                            <option value="bug">Bug</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Prioridad</label>
+                        <select id="taskPriority" class="form-control">
+                            <option value="low">Baja</option>
+                            <option value="medium">Media</option>
+                            <option value="high">Alta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Asignado a</label>
+                    <select id="taskAssignee" class="form-control">
+                        <option value="">Sin asignar</option>
+                        <option value="JP">Jose Pimentel</option>
+                        <option value="BA">Baldo Aguilar</option>
+                        <option value="AA">Aldo Aldaco</option>
+                        <option value="AV">Carlos Efren</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+                    <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
