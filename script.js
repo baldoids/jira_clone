@@ -1,11 +1,9 @@
-// Variables globales
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let currentColumn = "todo";
 let taskToDelete = null;
 let currentFilter = { assignee: "", sprint: "", release: "", search: "" };
 
 
-// Modal de creación
 function openModal(status) {
     currentColumn = status;
     document.getElementById("taskModal").style.display = "block";
@@ -17,7 +15,6 @@ function closeModal() {
 }
 
 
-// Modal confirmacion
 function openConfirmation(id) {
     taskToDelete = id;
     document.getElementById("confirmationModal").style.display = "block";
@@ -37,7 +34,6 @@ function confirmDeleteTask() {
     closeConfirmation();
 }
 
-// Guardar y renderizar
 
 function saveTask(event) {
     event.preventDefault();
@@ -72,10 +68,10 @@ function renderTasks() {
         done: document.getElementById("done-column")
     };
 
-    // Vaciar columnas
+
     Object.values(columns).forEach(col => col.innerHTML = "");
 
-    // Renderizar tareas filtradas
+
     tasks.filter(applyFilters).forEach(task => {
         const taskDiv = document.createElement("div");
         taskDiv.classList.add("task-card");
@@ -91,7 +87,7 @@ function renderTasks() {
             <button class="btn btn-danger" onclick="openConfirmation(${task.id})">Eliminar</button>
         `;
 
-        // Drag & Drop
+     
         taskDiv.addEventListener("dragstart", dragStart);
         taskDiv.addEventListener("dragend", dragEnd);
 
@@ -101,7 +97,6 @@ function renderTasks() {
     updateCounts();
 }
 
-// Contadores
 
 function updateCounts() {
     document.getElementById("todo-count").innerText =
@@ -115,7 +110,7 @@ function updateCounts() {
 }
 
 
-// Drag & Drop
+
 
 let draggedTaskId = null;
 
@@ -150,7 +145,7 @@ document.querySelectorAll(".column").forEach(column => {
 });
 
 
-// Filtros y búsqueda
+
 function applyFilters(task) {
     if (currentFilter.assignee && task.assignee !== currentFilter.assignee) return false;
     if (currentFilter.sprint && task.sprint !== currentFilter.sprint) return false;
@@ -184,22 +179,19 @@ function searchTasks(e) {
     renderTasks();
 }
 
-// Debug
 
 function debugLocalStorage() {
     console.log("Tasks en localStorage:", JSON.parse(localStorage.getItem("tasks")));
 }
 
 
-// Inicialización
+
 document.addEventListener("DOMContentLoaded", () => {
     renderTasks();
 
-    // Botones de filtro
     document.querySelector(".header-actions .btn:nth-child(2)").addEventListener("click", filterByAssignee);
     document.querySelector(".header-actions .btn:nth-child(3)").addEventListener("click", filterBySprint);
     document.querySelector(".header-actions .btn:nth-child(4)").addEventListener("click", filterByRelease);
 
-    // Barra de búsqueda
     document.querySelector(".search-box").addEventListener("input", searchTasks);
 });
